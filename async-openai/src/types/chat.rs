@@ -774,7 +774,11 @@ fn deserialize_finish_reason<'de, D>(deserializer: D) -> Result<Option<FinishRea
 where
     D: Deserializer<'de>,
 {
-    let s = String::deserialize(deserializer)?;
+    let s = match String::deserialize(deserializer) {
+        Ok(s) => s,
+        Err(_) => return Ok(None),
+    };
+
     match s.as_str() {
         "stop" => Ok(Some(FinishReason::Stop)),
         "length" => Ok(Some(FinishReason::Length)),
