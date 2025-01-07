@@ -1,6 +1,6 @@
 [package]
 name = "async-openai-alt"
-version = "0.26.0"
+version = "0.26.1"
 authors = ["TabbyML", "Himanshu Neema"]
 categories = ["api-bindings", "web-programming", "asynchronous"]
 keywords = ["openai", "async", "openapi", "ai"]
@@ -9,8 +9,8 @@ edition = "2021"
 rust-version = "1.65"
 license = "MIT"
 readme = "README.md"
-homepage = "https://github.com/64bit/async-openai"
-repository = "https://github.com/64bit/async-openai"
+homepage = "https://github.com/TabbyML/async-openai"
+repository = "https://github.com/TabbyML/async-openai"
 
 [features]
 default = ["rustls"]
