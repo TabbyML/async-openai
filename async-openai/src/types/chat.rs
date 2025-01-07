@@ -2,7 +2,7 @@ use std::{collections::HashMap, pin::Pin};
 
 use derive_builder::Builder;
 use futures::Stream;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 
 use crate::error::OpenAIError;
 
@@ -764,9 +764,27 @@ pub struct ChatChoiceStream {
     /// The index of the choice in the list of choices.
     pub index: u32,
     pub delta: ChatCompletionStreamResponseDelta,
+    #[serde(deserialize_with = "deserialize_finish_reason")]
     pub finish_reason: Option<FinishReason>,
     /// Log probability information for the choice.
     pub logprobs: Option<ChatChoiceLogprobs>,
+}
+
+fn deserialize_finish_reason<'de, D>(deserializer: D) -> Result<Option<FinishReason>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let s = String::deserialize(deserializer)?;
+    match s.as_str() {
+        "stop" => Ok(Some(FinishReason::Stop)),
+        "length" => Ok(Some(FinishReason::Length)),
+        "tool_calls" => Ok(Some(FinishReason::ToolCalls)),
+        "content_filter" => Ok(Some(FinishReason::ContentFilter)),
+        "function_call" => Ok(Some(FinishReason::FunctionCall)),
+
+        // treat any other value as None
+        _ => Ok(None),
+    }
 }
 
 #[derive(Debug, Deserialize, Clone, PartialEq, Serialize)]
