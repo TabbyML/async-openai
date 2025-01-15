@@ -774,16 +774,19 @@ fn deserialize_finish_reason<'de, D>(deserializer: D) -> Result<Option<FinishRea
 where
     D: Deserializer<'de>,
 {
-    let s = String::deserialize(deserializer)?;
-    match s.as_str() {
-        "stop" => Ok(Some(FinishReason::Stop)),
-        "length" => Ok(Some(FinishReason::Length)),
-        "tool_calls" => Ok(Some(FinishReason::ToolCalls)),
-        "content_filter" => Ok(Some(FinishReason::ContentFilter)),
-        "function_call" => Ok(Some(FinishReason::FunctionCall)),
+    let opt = Option::<String>::deserialize(deserializer)?;
+    match opt {
+        None => Ok(None),
+        Some(s) => match s.as_str() {
+            "stop" => Ok(Some(FinishReason::Stop)),
+            "length" => Ok(Some(FinishReason::Length)),
+            "tool_calls" => Ok(Some(FinishReason::ToolCalls)),
+            "content_filter" => Ok(Some(FinishReason::ContentFilter)),
+            "function_call" => Ok(Some(FinishReason::FunctionCall)),
 
-        // treat any other value as None
-        _ => Ok(None),
+            // treat any other value as None
+            _ => Ok(None),
+        },
     }
 }
 
