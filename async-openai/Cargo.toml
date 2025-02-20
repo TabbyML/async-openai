@@ -1,6 +1,6 @@
 [package]
 name = "async-openai-alt"
-version = "0.26.1"
+version = "0.26.2"
 authors = ["TabbyML", "Himanshu Neema"]
 categories = ["api-bindings", "web-programming", "asynchronous"]
 keywords = ["openai", "async", "openapi", "ai"]
